@@ -1,8 +1,8 @@
-from geometry import Point
-from geometry import Sphere
 
-a = Point(0, 0, 0)
-print(a.getX(), a.getY(), a.getZ())
+from geometry import Point, Sphere
 
-sphere = Sphere(a, 300)
-print(sphere.isOverlapping(Point(300, 0, 0)))
+center = Point(0, 0, 0)
+sphere = Sphere(center, 300)
+
+pointA = Point(212, 212, 0)
+print(sphere.isOverlapping(pointA))

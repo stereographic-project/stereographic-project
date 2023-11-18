@@ -4,7 +4,7 @@ from math   import sqrt
 from geometry.point import Point
 
 class Sphere:
-    def __init__(self, center: Point, radius: float, error: float = 1.0) -> None:
+    def __init__(self, center: Point, radius: float, error: float = .5) -> None:
         self.center = center
         self.radius = radius
         self.error  = error
@@ -27,7 +27,7 @@ class Sphere:
         radius        = self.calculateDistanceToCenter(point)
         absoluteError = self.calculateAbsoluteError(radius)
         relativeError = self.calculateRelativeError(absoluteError)
-        
+
         return relativeError <= self.error
 
     # GETTERS

@@ -1,12 +1,28 @@
-from geometry import Point, Sphere, Line, Plane
+from geometry   import Point, Sphere, Plane
+from projection import Stereographic
 
 center = Point(0, 0, 0)
 sphere = Sphere(center, 300)
 
+center = Point(0, 0, 400)
+plane = Plane(center)
+
 pointA = Point(173, 173, 173)
-print(sphere.isOverlapping(pointA))
+pointB = Point(300, 0, 0)
+pointC = Point(0, 300, 0)
+pointD = Point(212.1, 0, 212.1)
+pointE = Point(0, 0, 300)
+pointE = Point(0, 0, -300)
+pointF = Point(400, 400, 400)
 
-line = Line(center, pointA)
-intersection = Plane(Point(0, 0, 400)).calculateIntersection(line)
+points = [
+    pointA,
+    pointB,
+    pointC,
+    pointD,
+    pointE,
+    pointF,
+]
 
-print((intersection.getX(), intersection.getY(), intersection.getZ()))
+projection = Stereographic(sphere, plane, points)
+print([(point.getX(), point.getY()) for point in projection.execute()])

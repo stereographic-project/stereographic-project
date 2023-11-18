@@ -1,7 +1,6 @@
 from geometry.line  import Line
 from geometry.point import Point
 
-
 class Plane:
     def __init__(self, center: Point) -> None:
         self.center = center

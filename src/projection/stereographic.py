@@ -1,36 +1,28 @@
-from typing import List, Self
-
-from geometry.line   import Line
-from geometry.plane  import Plane
-from geometry.point  import Point
-from geometry.sphere import Sphere
+from geometry    import Plane, Sphere, Line
+from coordinates import Cartesian, Translator
 
 class Stereographic:
-    def __init__(self, sphere: Sphere, plane: Plane, points: List[Point]) -> None:
+    def __init__(self, sphere: Sphere, plane: Plane) -> None:
         self.sphere = sphere
         self.plane  = plane
-        self.points = points
     
-    # TODO: REFACTOR THIS !!!
-    def execute(self) -> List[Point]:
-        pole = Point(0, 0, self.sphere.getRadius())
+    def execute(self) -> Plane:
+        pole = Cartesian(0, 0, self.sphere.getRadius())
         
-        points = []
-        for point in self.points:
+        for point in self.sphere.getPoints():
             if point == pole:
                 continue
             
-            if self.sphere.isOverlapping(point):
-                line = Line(pole, point)
-                intersection = self.plane.calculateIntersection(line)
-                points.append(intersection)
+            if not self.sphere.isOverlapping(point):
+                continue
+            
+            cartesian    = Translator.sphericalToCartesian(point)
+            line         = Line(pole, cartesian)
+            intersection = self.plane.calculateIntersection(line)
+            
+            self.plane.addPoint(intersection)
         
-        return points
-    
-    # ADDERS
-    def addPoint(self, point: Point) -> Self:
-        self.points.append(point)
-        return self
+        return self.plane
     
     # GETTERS
     def getSphere(self) -> Sphere:
@@ -38,6 +30,3 @@ class Stereographic:
     
     def getPlane(self) -> Plane:
         return self.plane
-    
-    def getPoints(self) -> List[Point]:
-        return self.points

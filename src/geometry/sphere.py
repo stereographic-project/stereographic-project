@@ -1,46 +1,36 @@
-from typing import Self
-from math   import sqrt
+from typing import List, Self
 
-from geometry.point import Point
+from coordinates import Cartesian, Spherical
 
 class Sphere:
-    def __init__(self, center: Point, radius: float, error: float = .5) -> None:
+    points = []
+
+    def __init__(self, center: Cartesian, radius: float) -> None:
         self.center = center
-        self.radius = radius
-        self.error  = error
-
-    def calculateDistanceToCenter(self, point: Point) -> float:
-        x = (point.getX() - self.center.getX())**2
-        y = (point.getY() - self.center.getY())**2
-        z = (point.getZ() - self.center.getZ())**2
-
-        return sqrt(x + y + z)
-
-    def calculateAbsoluteError(self, radius: float) -> float:
-        return abs(self.radius - radius)
-
-    def calculateRelativeError(self, absoluteError: float) -> float:
-        return (absoluteError / self.radius) * 100
+        self.radius = radius    
 
     # CONDITIONS
-    def isOverlapping(self, point: Point) -> bool:
-        radius        = self.calculateDistanceToCenter(point)
-        absoluteError = self.calculateAbsoluteError(radius)
-        relativeError = self.calculateRelativeError(absoluteError)
-
-        return relativeError <= self.error
+    def isOverlapping(self, point: Spherical) -> bool:
+        return point.getRadius == self.radius
 
     # GETTERS
-    def getCenter(self) -> Point:
+    def getCenter(self) -> Cartesian:
         return self.center
 
     def getRadius(self) -> float:
         return self.radius
-
-    def getError(self) -> float:
-        return self.error
+    
+    def getPoints(self) -> List[Spherical]:
+        return self.points
 
     # SETTERS
-    def setError(self, value: float) -> Self:      
-        self.error = value
+    def setPoints(self, points: List[Spherical]) -> Self:
+        self.points = points
+        return self
+
+    # ADDERS
+    def addPoint(self, point: Spherical) -> Self:
+        if self.isOverlapping(point):
+            self.points.append(point)
+        
         return self

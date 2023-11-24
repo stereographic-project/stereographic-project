@@ -4,9 +4,10 @@ class Vector:
         self.y = y
         self.z = z
 
+    # GETTERS
     def getX(self) -> float:
         return self.x
-        
+    
     def getY(self) -> float:
         return self.y
     

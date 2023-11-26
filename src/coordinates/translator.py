@@ -1,8 +1,8 @@
 from math import cos, acos, sin, atan
 from math import sqrt
 
-from coordinates.spherical import Spherical
-from coordinates.cartesian import Cartesian
+from coordinates import Spherical
+from coordinates import Cartesian
 
 class Translator:
     @staticmethod

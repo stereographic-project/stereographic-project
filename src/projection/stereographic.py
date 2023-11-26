@@ -10,13 +10,14 @@ class Stereographic:
         pole = Cartesian(0, 0, self.sphere.getRadius())
         
         for point in self.sphere.getPoints():
-            if point == pole:
+            cartesian    = Translator.sphericalToCartesian(point)
+            
+            if cartesian == pole:
                 continue
             
             if not self.sphere.isOverlapping(point):
                 continue
             
-            cartesian    = Translator.sphericalToCartesian(point)
             line         = Line(pole, cartesian)
             intersection = self.plane.calculateIntersection(line)
             

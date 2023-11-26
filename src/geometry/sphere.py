@@ -11,7 +11,7 @@ class Sphere:
 
     # CONDITIONS
     def isOverlapping(self, point: Spherical) -> bool:
-        return point.getRadius == self.radius
+        return point.getRadius() == self.radius
 
     # GETTERS
     def getCenter(self) -> Cartesian:

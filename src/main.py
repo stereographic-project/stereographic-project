@@ -2,8 +2,7 @@ from coordinates import Cartesian, Spherical
 from geometry    import Sphere, Plane
 from projection  import Stereographic
 
-center = Cartesian(0, 0, 0)
-sphere = Sphere( center, 300 )
+sphere = Sphere(300)
 
 points = [
     Spherical(300, 10, 30),
@@ -19,9 +18,10 @@ points = [
 sphere.setPoints( points )
 
 center = Cartesian(0, 0, -200)
-plane = Plane(center)
+plane  = Plane(center)
 
 stereographic = Stereographic(sphere, plane).execute()
 
 for point in stereographic.getPoints():
-    print((point.getX(), point.getY(), point.getZ()))
+    print(point.display())
+

@@ -4,6 +4,10 @@ class Cartesian:
         self.y = y
         self.z = z
 
+    # DISPLAY
+    def display(self) -> tuple:
+        return (self.x, self.y, self.z)
+    
     # GETTERS
     def getX(self):
         return self.x

@@ -18,6 +18,10 @@ class Spherical:
         self.theta *= multiplier
         self.phi   *= multiplier
     
+    # DISPLAY
+    def display(self) -> tuple:
+        return (self.radius, self.theta, self.phi)
+    
     # GETTERS
     def getRadius(self) -> float:
         return self.radius

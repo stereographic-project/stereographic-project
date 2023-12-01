@@ -15,9 +15,6 @@ class Stereographic:
             if cartesian == pole:
                 continue
             
-            if not self.sphere.isOverlapping(point):
-                continue
-            
             line         = Line(pole, cartesian)
             intersection = self.plane.calculateIntersection(line)
             

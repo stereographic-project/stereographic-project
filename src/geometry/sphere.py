@@ -1,12 +1,11 @@
 from typing import List, Self
 
-from coordinates import Cartesian, Spherical
+from coordinates import Spherical
 
 class Sphere:
     points = []
 
-    def __init__(self, center: Cartesian, radius: float) -> None:
-        self.center = center
+    def __init__(self, radius: float) -> None:
         self.radius = radius    
 
     # CONDITIONS
@@ -14,9 +13,6 @@ class Sphere:
         return point.getRadius() == self.radius
 
     # GETTERS
-    def getCenter(self) -> Cartesian:
-        return self.center
-
     def getRadius(self) -> float:
         return self.radius
     
@@ -25,7 +21,7 @@ class Sphere:
 
     # SETTERS
     def setPoints(self, points: List[Spherical]) -> Self:
-        self.points = points
+        self.points = [point for point in points if self.isOverlapping(point)]
         return self
 
     # ADDERS

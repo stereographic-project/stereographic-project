@@ -1,7 +1,7 @@
 from typing import List, Self
 
 from geometry    import Line
-from coordinates import Cartesian
+from coordinates import Cartesian, Translator
 
 class Plane:
     points = []
@@ -11,11 +11,13 @@ class Plane:
 
     # CALCULATORS
     def calculateIntersection(self, line: Line) -> Cartesian:
-        multiplier = self.center.getZ() / line.getVector().getZ()
+        point      = line.getB()
+        radius     = Translator.cartesianToSpherical(point).getRadius()
+        multiplier = (self.center.getZ() - radius) / (point.getZ() - radius)
         
-        x = round(line.getVector().getX() * multiplier, 1)
-        y = round(line.getVector().getY() * multiplier, 1)
-        z = round(line.getVector().getZ() * multiplier, 1)
+        x = round(line.getA().getX() + line.getVector().getX() * multiplier, 1)
+        y = round(line.getA().getY() + line.getVector().getY() * multiplier, 1)
+        z = round(line.getA().getZ() + line.getVector().getZ() * multiplier, 1)
         
         return Cartesian(x, y, z)
 

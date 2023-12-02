@@ -1,33 +1,16 @@
-from math import pi
+from math        import pi
+from dataclasses import dataclass
 
+@dataclass
 class Spherical:
-    def __init__(self, radius: float, theta: float, phi: float) -> None:
-        self.radius = radius
-        self.theta  = theta
-        self.phi    = phi
+    radius: float
+    theta:  float
+    phi:    float
 
-    def toRadians(self) -> None:
-        multiplier = pi / 180
-        
-        self.theta *= multiplier
-        self.phi   *= multiplier
+    @property
+    def theta_radian(self) -> float:
+        return self.theta * pi / 180
 
-    def toDegrees(self) -> None:
-        multiplier = 180 / pi
-        
-        self.theta *= multiplier
-        self.phi   *= multiplier
-    
-    # DISPLAY
-    def display(self) -> tuple:
-        return (self.radius, self.theta, self.phi)
-    
-    # GETTERS
-    def getRadius(self) -> float:
-        return self.radius
-
-    def getTheta(self) -> float:
-        return self.theta
-
-    def getPhi(self) -> float:
-        return self.phi
+    @property
+    def phi_radian(self) -> float:
+        return self.phi * pi / 180

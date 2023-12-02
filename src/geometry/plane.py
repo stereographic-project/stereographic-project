@@ -1,45 +1,33 @@
-from typing import List, Self
+from typing      import List, Self
+from dataclasses import dataclass, field
 
 from geometry    import Line
-from coordinates import Cartesian, Translator
+from coordinates import Cartesian, to_spherical
 
+@dataclass
 class Plane:
-    points = []
-
-    def __init__(self, center: Cartesian) -> None:
-        self.center = center
-
-    # CALCULATORS
-    def calculateIntersection(self, line: Line) -> Cartesian:
-        point      = line.getB()
-        radius     = Translator.cartesianToSpherical(point).getRadius()
-        multiplier = (self.center.getZ() - radius) / (point.getZ() - radius)
-        
-        x = round(line.getA().getX() + line.getVector().getX() * multiplier, 1)
-        y = round(line.getA().getY() + line.getVector().getY() * multiplier, 1)
-        z = round(line.getA().getZ() + line.getVector().getZ() * multiplier, 1)
-        
-        return Cartesian(x, y, z)
-
-    # CONDITIONS
-    def isOverlapping(self, point: Cartesian) -> bool:
-        return point.getZ() == self.center.getZ()
-
-    # GETTERS
-    def getCenter(self) -> Cartesian:
-        return self.center
-
-    def getPoints(self) -> List[Cartesian]:
-        return self.points
-
-    # SETTERS
-    def setPoints(self, points: List[Cartesian]) -> Self:
-        self.points = points
-        return self
-
-    # ADDERS
-    def addPoint(self, point: Cartesian) -> Self:
-        if self.isOverlapping(point):
+    height: float
+    points: List[Cartesian] = field(default_factory=list)
+    
+    # MAGIC METHODS
+    def __add__(self, point: Cartesian) -> Self:
+        if is_overlapping(self, point):
             self.points.append(point)
-        
+            
         return self
+    
+    def __post_init__(self):
+        self.points = [point for point in self.points if is_overlapping(point)]
+
+def is_overlapping(plane: Plane, point: Cartesian) -> bool:
+    return plane.height == point.z
+
+def calculate_intersection(plane: Plane, line: Line) -> Cartesian:
+    radius = to_spherical(line.b).radius
+    scalar = (plane.height - radius) / (line.b.z - radius)
+    
+    x = round(line.a.x + line.vector.x * scalar, 1)
+    y = round(line.a.y + line.vector.y * scalar, 1)
+    z = round(line.a.z + line.vector.z * scalar, 1)
+    
+    return Cartesian(x, y, z)

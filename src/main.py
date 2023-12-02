@@ -1,27 +1,15 @@
-from coordinates import Cartesian, Spherical
+from coordinates import Spherical
 from geometry    import Sphere, Plane
 from projection  import Stereographic
 
 sphere = Sphere(300)
 
-points = [
-    Spherical(300, 10, 30),
-    Spherical(300, 20, 30),
-    Spherical(300, 30, 30),
-    Spherical(300, 40, 30),
-    Spherical(300, 50, 30),
-    Spherical(300, 60, 30),
-    Spherical(300, 70, 30),
-    Spherical(300, 80, 30)
-]
+sphere \
+    + Spherical(300, 90,  0) \
+    + Spherical(300, 90, 20) \
+    + Spherical(300, 90, 30) \
+    + Spherical(300, 90, 90) \
 
-sphere.setPoints( points )
+plane = Plane(-300)
 
-center = Cartesian(0, 0, -200)
-plane  = Plane(center)
-
-stereographic = Stereographic(sphere, plane).execute()
-
-for point in stereographic.getPoints():
-    print(point.display())
-
+print(Stereographic(sphere, plane).to_plane())

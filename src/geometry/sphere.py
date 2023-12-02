@@ -1,32 +1,27 @@
-from typing import List, Self
+from typing      import List, Self
+from dataclasses import dataclass, field
 
 from coordinates import Spherical
+from coordinates.cartesian import Cartesian
 
+@dataclass
 class Sphere:
-    points = []
-
-    def __init__(self, radius: float) -> None:
-        self.radius = radius    
-
-    # CONDITIONS
-    def isOverlapping(self, point: Spherical) -> bool:
-        return point.getRadius() == self.radius
-
-    # GETTERS
-    def getRadius(self) -> float:
-        return self.radius
+    radius: float
+    points: List[Spherical] = field(default_factory=list)
     
-    def getPoints(self) -> List[Spherical]:
-        return self.points
-
-    # SETTERS
-    def setPoints(self, points: List[Spherical]) -> Self:
-        self.points = [point for point in points if self.isOverlapping(point)]
-        return self
-
-    # ADDERS
-    def addPoint(self, point: Spherical) -> Self:
-        if self.isOverlapping(point):
+    @property
+    def pole(self) -> Cartesian:
+        return Cartesian(0, 0, self.radius)
+    
+    # MAGIC METHODS
+    def __add__(self, point: Spherical) -> Self:
+        if is_overlapping(self, point):
             self.points.append(point)
-        
+            
         return self
+    
+    def __post_init__(self):
+        self.points = [point for point in self.points if is_overlapping(point)]
+    
+def is_overlapping(sphere: Sphere, point: Spherical) -> bool:
+    return sphere.radius == point.radius

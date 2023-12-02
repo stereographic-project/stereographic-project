@@ -1,30 +1,22 @@
-from geometry    import Plane, Sphere, Line
-from coordinates import Cartesian, Translator
+from coordinates import to_cartesian
+from geometry import Plane, Sphere, Line
+from geometry.plane import calculate_intersection
 
 class Stereographic:
     def __init__(self, sphere: Sphere, plane: Plane) -> None:
         self.sphere = sphere
         self.plane  = plane
-    
-    def execute(self) -> Plane:
-        pole = Cartesian(0, 0, self.sphere.getRadius())
-        
-        for point in self.sphere.getPoints():
-            cartesian    = Translator.sphericalToCartesian(point)
+
+    def to_plane(self) -> Plane:
+        for point in self.sphere.points:
+            cartesian = to_cartesian(point)
             
-            if cartesian == pole:
+            if cartesian == self.sphere.pole:
                 continue
             
-            line         = Line(pole, cartesian)
-            intersection = self.plane.calculateIntersection(line)
+            line = Line(self.sphere.pole, cartesian)
+            intersection = calculate_intersection(self.plane, line)
             
-            self.plane.addPoint(intersection)
-        
-        return self.plane
-    
-    # GETTERS
-    def getSphere(self) -> Sphere:
-        return self.sphere
-    
-    def getPlane(self) -> Plane:
+            self.plane + intersection
+            
         return self.plane

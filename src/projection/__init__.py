@@ -1,1 +1,0 @@
-from projection.stereographic import *

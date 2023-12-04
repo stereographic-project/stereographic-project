@@ -3,11 +3,11 @@ from dataclasses import dataclass
 from geometry    import Vector
 from coordinates import Cartesian
 
-@dataclass
+@dataclass(frozen = True)
 class Line:
     a: Cartesian
     b: Cartesian
-
+    
     @property
     def vector(self) -> Vector:
         x = self.b.x - self.a.x

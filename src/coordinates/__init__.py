@@ -1,3 +1,3 @@
-from coordinates.cartesian import *
-from coordinates.spherical import *
-from coordinates.convertor import *
+from coordinates.cartesian import Cartesian
+from coordinates.spherical import Spherical
+from coordinates.convertor import to_cartesian, to_spherical

@@ -1,22 +1,16 @@
-from math        import pi, sqrt
-from math        import cos, sin, atan2
-
+from math        import pi, sqrt, cos, sin, atan2
 from coordinates import Cartesian, Spherical
 
-def to_cartesian(spherical: Spherical) -> Cartesian:
-    x = round(spherical.radius * sin(spherical.phi_radian) * cos(spherical.theta_radian), 8)
-    y = round(spherical.radius * sin(spherical.phi_radian) * sin(spherical.theta_radian), 8)
-    z = round(spherical.radius * cos(spherical.phi_radian), 8)
-
+def to_cartesian(point: Spherical) -> Cartesian:
+    x = round(point.radius * sin(point.rad_phi) * cos(point.rad_theta), 8)
+    y = round(point.radius * sin(point.rad_phi) * sin(point.rad_theta), 8)
+    z = round(point.radius * cos(point.rad_phi), 8)
+    
     return Cartesian(x, y, z)
 
-def to_spherical(cartesian: Cartesian) -> Spherical:
-    radius       = sqrt(cartesian.x ** 2 + cartesian.y ** 2 + cartesian.z ** 2)
-    theta_radian = atan2(cartesian.y, cartesian.x)
-    phi_radian   = atan2(sqrt(cartesian.x ** 2 + cartesian.y ** 2), cartesian.z)
-
-    multiplier = 180 / pi
-    theta = multiplier * theta_radian
-    phi   = multiplier * phi_radian
-
+def to_spherical(point: Cartesian) -> Spherical:
+    radius = sqrt(point.x ** 2 + point.y ** 2 + point.z ** 2)
+    theta  = atan2(point.y, point.x)                           * (180 / pi)
+    phi    = atan2(sqrt(point.x ** 2 + point.y ** 2), point.z) * (180 / pi)
+    
     return Spherical(radius, theta, phi)

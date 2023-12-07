@@ -13,7 +13,32 @@ class Matrix:
     def columns(self) -> int:
         return len(self.matrix[0])
     
-    def __matmul__(self, matrix: Self):
+    # MAGIC METHODS
+    def __add__(self, matrix: Self) -> Self:
+        if self.columns != matrix.columns:
+            return
+        
+        if self.rows != matrix.rows:
+            return
+        
+        result = [[self.matrix[i][j] + matrix.matrix[i][j] for j in range(self.columns)] for i in range(self.rows)]
+        return Matrix(result)
+    
+    def __sub__(self, matrix: Self) -> Self:
+        if self.columns != matrix.columns:
+            return
+        
+        if self.rows != matrix.rows:
+            return
+        
+        result = self + (matrix * -1)
+        return result
+    
+    def __mul__(self, scalar: float) -> Self:
+        result = [[self.matrix[i][j] * scalar for j in range(self.columns)] for i in range(self.rows)]
+        return Matrix(result)
+    
+    def __matmul__(self, matrix: Self) -> Self:
         if self.columns != matrix.rows:
             return
         
@@ -27,4 +52,4 @@ class Matrix:
                 
                 result[i][j] = cell
                 
-        return result
+        return Matrix(result)

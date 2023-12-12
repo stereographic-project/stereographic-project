@@ -1,7 +1,7 @@
 from math        import pi, cos, sin
 from dataclasses import dataclass
 
-from rotations   import Matrix
+from matrices import Matrix
 
 @dataclass
 class Rotation:

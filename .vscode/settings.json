@@ -1,6 +1,7 @@
 {
     "python.analysis.autoImportCompletions": true,
     "cSpell.words": [
-        "cartesian"
+        "cartesian",
+        "pygame"
     ]
 }

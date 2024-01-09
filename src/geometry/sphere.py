@@ -43,8 +43,9 @@ class Sphere:
         self.points.append(point)
 
     # CONDITIONS
-    def is_overlapping(self, point: Spherical) -> bool:
-        return self.radius == point.radius
+    def is_overlapping(self, point: Spherical, threshold: float = 5) -> bool:
+        gap = self.radius * threshold / 100
+        return point.radius >= self.radius - gap and point.radius <= self.radius + gap
 
     # MAGIC METHODS
     def __post_init__(self) -> None:

@@ -15,8 +15,8 @@ class Plane:
             return
         
         # TODO: Find why it doesn't works
-        # if not self.is_overlapping(point):
-        #     return
+        if not self.is_overlapping(point):
+            return
         
         self.points.append(point)
 
@@ -25,6 +25,8 @@ class Plane:
         radius = to_spherical(line.b).radius
         scalar = (self.height - radius) / (line.b.z - radius)
         
+        # scalar = self.height - line.b.z
+
         x = line.a.x + line.vector.x * scalar
         y = line.a.y + line.vector.y * scalar
         z = line.a.z + line.vector.z * scalar
@@ -32,11 +34,10 @@ class Plane:
         return Cartesian(x, y, z)
 
     # CONDITIONS
-    def is_overlapping(self, point: Cartesian, threshold: float = 10) -> bool:
-        gap = abs(self.height * threshold / 100)
-        
-        # print(self.height == point.z, " -> ", (point.z >= self.height - gap) and (point.z <= self.height + gap))
-        return (point.z >= self.height - gap) and (point.z <= self.height + gap)
+    def is_overlapping(self, point: Cartesian, threshold: float = .1) -> bool:
+        # print(point.z)
+
+        return abs(point.z - self.height) <= abs(self.height * threshold / 100)
 
     # MAGIC METHODS
     def __post_init__(self) -> None:

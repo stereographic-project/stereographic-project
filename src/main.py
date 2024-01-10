@@ -10,7 +10,7 @@ import pygame
 import random
 
 points = []
-for _ in range(1000):
+for _ in range(1):
     points.append(Spherical(10, random.uniform(0, 360), random.uniform(0, 360)))    
 
 sphere = Sphere(10, points)

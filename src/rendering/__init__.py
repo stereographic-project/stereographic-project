@@ -1,1 +1,1 @@
-from rendering.renderer import Renderer
+from rendering.window import Window

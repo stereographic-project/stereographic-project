@@ -34,5 +34,3 @@ class Window:
             pygame.display.set_caption(str(self.clock.get_fps() // 1))
             pygame.display.flip()
             self.clock.tick(self.fps)
-
-            print(len(points))

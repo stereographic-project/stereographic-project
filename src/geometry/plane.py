@@ -14,7 +14,6 @@ class Plane:
         if point in self.points:
             return
         
-        # TODO: Find why it doesn't works
         if not self.is_overlapping(point):
             return
         
@@ -24,8 +23,6 @@ class Plane:
     def calculate_intersection(self, line: Line) -> Cartesian:
         radius = to_spherical(line.b).radius
         scalar = (self.height - radius) / (line.b.z - radius)
-        
-        # scalar = self.height - line.b.z
 
         x = line.a.x + line.vector.x * scalar
         y = line.a.y + line.vector.y * scalar
@@ -35,8 +32,6 @@ class Plane:
 
     # CONDITIONS
     def is_overlapping(self, point: Cartesian, threshold: float = .1) -> bool:
-        # print(point.z)
-
         return abs(point.z - self.height) <= abs(self.height * threshold / 100)
 
     # MAGIC METHODS

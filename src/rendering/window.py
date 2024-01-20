@@ -1,36 +1,44 @@
 import pygame
+pygame.init()
 
-from geometry import Sphere, Plane
-from projection import Stereographic
-from rotations import Rotation
-from coordinates import Cartesian
+from typing      import Callable
+from pygame      import Surface, Color
+from pygame.time import Clock
 from dataclasses import dataclass
 
+from rendering   import Point
+from projection  import Stereographic
+from coordinates import Cartesian
+
+@dataclass
 class Window:
-    def __init__(self, width: int, height: int) -> None:
-        pygame.init()
+    width:  int
+    height: int
+    
+    # Optionals
+    fps: int = 120
 
-        self.resolution = self.width, self.height = width, height
-        self.fps        = 120
-        
-        self.surface    = pygame.display.set_mode(self.resolution)
-        self.clock      = pygame.time.Clock()
+    @property
+    def resolution(self) -> tuple:
+        return (self.width, self.height)
 
-    def render(self, sphere: Sphere):
+    def __post_init__(self) -> None:
+        self.clock   = Clock()
+        self.surface = pygame.display.set_mode(self.resolution)
+
+    def render(self, stereographic: Stereographic) -> None:
+        for point in stereographic.plane.points:
+            Point(point).render(self.surface, Cartesian(self.width / 2, self.height / 2, -30))
+
+    def run(self, callback: Callable[[], Stereographic]) -> None:
         while True:
-            self.surface.fill(pygame.Color("black"))
+            self.surface.fill(Color(0, 0, 0))
+            stereographic = callback()
 
-            sphere.rotate(Rotation(.10, .10, .10))
-            plane = Plane(-30)
+            self.render(stereographic)
 
-            stereographic = Stereographic(sphere, plane)
-            points = stereographic.to_plane().points
-
-            for point in points:
-                pygame.draw.circle(self.surface, pygame.Color(255, 255, 255), (round(point.x) + self.width / 2, round(point.y) + self.height / 2), 5)
+            pygame.display.set_caption(f"Stereographic Projection: { len(stereographic.plane.points) } POINTS, { self.clock.get_fps() // 1 } FPS")
+            pygame.display.flip()
 
             [exit() for event in pygame.event.get() if event.type == pygame.QUIT]
-        
-            pygame.display.set_caption(str(self.clock.get_fps() // 1))
-            pygame.display.flip()
             self.clock.tick(self.fps)

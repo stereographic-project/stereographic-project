@@ -2,23 +2,27 @@ from typing      import Self
 from dataclasses import dataclass, field
 
 from rotations   import Rotation
+from geometry    import Meridian, Parallel
 from coordinates import Cartesian, Spherical, to_cartesian, to_spherical
 
 from matrices import Matrix
 
 @dataclass
 class Sphere:
-    radius: float
-    points: list[Spherical] = field(default_factory = list)
+    radius:    float
+    points:    list[Spherical] = field(default_factory = list)
+
+    meridians: list[Meridian]  = field(default_factory = list)
+    parallels: list[Parallel]  = field(default_factory = list)
 
     @property
     def pole(self) -> Cartesian:
         return Cartesian(0, 0, self.radius)
 
-    def rotate(self, rotation: Rotation) -> None:
-        points = []
+    def rotate_points(self, points: Spherical, rotation: Rotation) -> list[Spherical]:
+        rotated_points = []
         
-        for point in self.points:
+        for point in points:
             point  = to_cartesian(point)
             matrix = Matrix([[point.x, point.y, point.z]])@(rotation.matrix_x)@(rotation.matrix_y)@(rotation.matrix_z)
             
@@ -28,9 +32,22 @@ class Sphere:
             
             point = to_spherical(Cartesian(x, y, z))
             
-            points.append(point)
+            rotated_points.append(point)
         
-        self.points = points
+        return rotated_points
+
+    def rotate(self, rotation: Rotation) -> None:
+        self.points = self.rotate_points(self.points, rotation)
+
+        meridians = []
+
+        for meridian in self.meridians:
+            points = self.rotate_points(meridian.points, rotation)
+            meridian.set_points(points)
+
+        for parallel in self.parallels:
+            points = self.rotate_points(parallel.points, rotation)
+            parallel.set_points(points)
         
     # CRUD METHODS
     def add_point(self, point: Spherical) -> None:

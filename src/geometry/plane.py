@@ -22,7 +22,13 @@ class Plane:
     # CALCULATORS
     def calculate_intersection(self, line: Line) -> Cartesian:
         radius = to_spherical(line.b).radius
-        scalar = (self.height - radius) / (line.b.z - radius)
+        
+        divider = (line.b.z - radius)
+
+        if (line.b.z - radius) == 0:
+            divider = 0.000000000001
+
+        scalar = (self.height - radius) / divider
 
         x = line.a.x + line.vector.x * scalar
         y = line.a.y + line.vector.y * scalar

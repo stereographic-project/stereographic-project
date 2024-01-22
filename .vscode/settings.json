@@ -3,6 +3,9 @@
     "cSpell.words": [
         "blit",
         "cartesian",
-        "pygame"
+        "pygame",
+        "renderable",
+        "Renderable",
+        "subclasshook"
     ]
 }

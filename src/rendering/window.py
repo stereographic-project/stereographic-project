@@ -1,58 +1,70 @@
 import pygame
+pygame.init()
 
-from geometry import Sphere, Plane, Line, Circle
-from projection import Stereographic
-from rotations import Rotation
-from coordinates import Cartesian
+from typing      import Callable
+from pygame      import Surface, Color
+from pygame.time import Clock
 from dataclasses import dataclass
 
+from rendering   import Point, Circle
+from projection  import Stereographic
+from coordinates import Cartesian
+
+@dataclass
 class Window:
-    def __init__(self, width: int, height: int) -> None:
-        pygame.init()
+    width:  int
+    height: int
+    
+    # Optionals
+    fps: int = 120
 
-        self.resolution = self.width, self.height = width, height
-        self.fps        = 120
-        
-        self.surface    = pygame.display.set_mode(self.resolution)
-        self.clock      = pygame.time.Clock()
+    @property
+    def resolution(self) -> tuple:
+        return (self.width, self.height)
 
-    def render(self, sphere: Sphere):
+    @property
+    def origin(self) -> Cartesian:
+        return Cartesian(self.width / 2, self.height / 2, -30)
+
+    def __post_init__(self) -> None:
+        self.clock   = Clock()
+        self.surface = pygame.display.set_mode(self.resolution)
+
+    def render_meridians(self, stereographic: Stereographic) -> None:
+        for meridian in stereographic.sphere.meridians:
+            points = []
+
+            for point in meridian.points:
+                points.append(stereographic.point_to_plane(point))
+
+            Circle.from_points(points[0], points[1], points[2]).render(self.surface, self.origin)
+
+    def render_parallels(self, stereographic: Stereographic) -> None:
+        for parallel in stereographic.sphere.parallels:
+            points = []
+
+            for point in parallel.points:
+                points.append(stereographic.point_to_plane(point))
+
+            Circle.from_points(points[0], points[1], points[2]).render(self.surface, self.origin)
+
+
+    def render(self, stereographic: Stereographic) -> None:
+        for point in stereographic.plane.points:
+            Point(point).render(self.surface, self.origin)
+
+        self.render_meridians(stereographic)
+        self.render_parallels(stereographic)
+
+    def run(self, callback: Callable[[], Stereographic]) -> None:
         while True:
-            self.surface.fill(pygame.Color("black"))
+            self.surface.fill(Color(0, 0, 0))
+            stereographic = callback()
 
-            sphere.rotate(Rotation(.10, .10, .10))
-            plane = Plane(-30)
+            self.render(stereographic)
 
-            a = Cartesian(50, 60, 0)
-            b = Cartesian(100, 50, 0)
-            c = Cartesian(30, 30, 0)
-
-            circle = Circle.from_points(a, b, c)
-
-            pygame.draw.circle(self.surface, pygame.Color(255, 0, 0), (circle.center.x + self.width / 2, circle.center.y + self.height / 2), circle.radius + 3, 5)
-
-            pygame.draw.circle(self.surface, pygame.Color(255, 255, 255), (circle.center.x + self.width / 2, circle.center.y + self.height / 2), 5)
-            pygame.draw.circle(self.surface, pygame.Color(255, 255, 255), (a.x + self.width / 2, a.y + self.height / 2), 5)
-            pygame.draw.circle(self.surface, pygame.Color(255, 255, 255), (b.x + self.width / 2, b.y + self.height / 2), 5)
-            pygame.draw.circle(self.surface, pygame.Color(255, 255, 255), (c.x + self.width / 2, c.y + self.height / 2), 5)
-
-
-            # pygame.draw.line(self.surface, pygame.Color(255, 255, 0), (line.mediator.a.x, line.mediator.a.y), (line.mediator.b.x, line.mediator.b.y), 2)
-            # pygame.draw.line(self.surface, pygame.Color(255, 0, 255), (line.a.x, line.a.y), (line.b.x, line.b.y), 2)
-
-            stereographic = Stereographic(sphere, plane)
-            points = stereographic.to_plane().points
-
-            # pygame.draw.line(self.surface, pygame.Color(255, 0, 0), (points[0].x + self.width / 2, points[0].y + self.height / 2), (points[len(points) - 1].x + self.width / 2, points[len(points) - 1].y + self.height / 2), 5)
-
-            # for key in range(len(points) - 1):
-            #     pygame.draw.line(self.surface, pygame.Color(255, 0, 0), (points[key].x + self.width / 2, points[key].y + self.height / 2), (points[key + 1].x + self.width / 2, points[key + 1].y + self.height / 2), 5)
-
-            # for point in points:
-                # pygame.draw.circle(self.surface, pygame.Color(255, 255, 255), (round(point.x) + self.width / 2, round(point.y) + self.height / 2), 5)
+            pygame.display.set_caption(f"Stereographic Projection: { len(stereographic.plane.points) } POINTS, { self.clock.get_fps() // 1 } FPS")
+            pygame.display.flip()
 
             [exit() for event in pygame.event.get() if event.type == pygame.QUIT]
-        
-            pygame.display.set_caption(str(self.clock.get_fps() // 1))
-            pygame.display.flip()
             self.clock.tick(self.fps)

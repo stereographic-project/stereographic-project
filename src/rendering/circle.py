@@ -41,6 +41,10 @@ class Circle(Renderable):
         return Circle(radius, center)
 
     def render(self, surface: Surface, origin: Cartesian, color: Color = Color(255, 255, 255), weight: int = 5) -> None:
-        position = (self.center.x + origin.x, self.center.y + origin.y)
+        diameter  = self.radius * 2
+        rectangle = (origin.x + self.center.x - self.radius, origin.y + self.center.y - self.radius, diameter, diameter)
 
-        pygame.draw.circle(surface, color, position, self.radius, weight)
+        print(self.radius)
+        pygame.draw.rect(surface, Color(255, 0, 0), rectangle, weight)
+        
+        # pygame.draw.circle(surface, color, position, self.radius, weight)

@@ -48,7 +48,6 @@ class Window:
 
             Circle.from_points(points[0], points[1], points[2]).render(self.surface, self.origin)
 
-
     def render(self, stereographic: Stereographic) -> None:
         for point in stereographic.plane.points:
             Point(point).render(self.surface, self.origin)
@@ -63,7 +62,7 @@ class Window:
 
             self.render(stereographic)
 
-            pygame.display.set_caption(f"Stereographic Projection: { len(stereographic.plane.points) } POINTS, { self.clock.get_fps() // 1 } FPS")
+            pygame.display.set_caption(f"Stereographic Projection: { len(stereographic.plane.points) } POINTS, { len(stereographic.sphere.meridians) } MERIDIANS AND { len(stereographic.sphere.parallels) } PARALLELS. { self.clock.get_fps() // 1 } FPS")
             pygame.display.flip()
 
             [exit() for event in pygame.event.get() if event.type == pygame.QUIT]

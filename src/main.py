@@ -9,8 +9,8 @@ from coordinates import Spherical
 
 points = []
 
-for _ in range(500):
-    points.append(Spherical(10, random.uniform(0, 360), random.uniform(0, 360)))
+# for _ in range(500):
+#     points.append(Spherical(10, random.uniform(0, 360), random.uniform(0, 360)))
 
 meridians = [
     Meridian(10, 90)
@@ -26,7 +26,7 @@ def rotate() -> Stereographic:
     global sphere
 
     plane = Plane(-500)
-    sphere.rotate(Rotation(0, 1, 1))
+    sphere.rotate(Rotation(0, .1, .1))
 
     stereographic = Stereographic(sphere, plane)
     stereographic.to_plane()

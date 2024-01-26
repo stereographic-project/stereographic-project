@@ -2,11 +2,12 @@ import pygame
 pygame.init()
 
 from typing      import Callable
-from pygame      import Surface, Color
+from pygame      import K_SPACE, Surface, Color
 from pygame.time import Clock
 from dataclasses import dataclass
 
 from rendering   import Point, Circle
+from geometry    import Line
 from projection  import Stereographic
 from coordinates import Cartesian
 
@@ -14,9 +15,9 @@ from coordinates import Cartesian
 class Window:
     width:  int
     height: int
-    
+
     # Optionals
-    fps: int = 120
+    fps: int = 60
 
     @property
     def resolution(self) -> tuple:
@@ -48,6 +49,7 @@ class Window:
 
             Circle.from_points(points[0], points[1], points[2]).render(self.surface, self.origin)
 
+
     def render(self, stereographic: Stereographic) -> None:
         for point in stereographic.plane.points:
             Point(point).render(self.surface, self.origin)
@@ -57,13 +59,18 @@ class Window:
 
     def run(self, callback: Callable[[], Stereographic]) -> None:
         while True:
-            self.surface.fill(Color(0, 0, 0))
-            stereographic = callback()
-
-            self.render(stereographic)
-
-            pygame.display.set_caption(f"Stereographic Projection: { len(stereographic.plane.points) } POINTS, { len(stereographic.sphere.meridians) } MERIDIANS AND { len(stereographic.sphere.parallels) } PARALLELS. { self.clock.get_fps() // 1 } FPS")
-            pygame.display.flip()
-
             [exit() for event in pygame.event.get() if event.type == pygame.QUIT]
             self.clock.tick(self.fps)
+            
+            if pygame.key.get_pressed()[K_SPACE]:
+                pygame.display.set_caption(f"Stereographic Projection: PAUSED")
+                continue
+
+            self.surface.fill(Color(0, 0, 0))
+            stereographic = callback()
+            
+            pygame.display.set_caption(f"Stereographic Projection: { len(stereographic.plane.points) } POINTS, { len(stereographic.sphere.meridians) } MERIDIANS AND { len(stereographic.sphere.parallels) } PARALLELS. { self.clock.get_fps() // 1 } FPS")
+            
+            self.render(stereographic)            
+            
+            pygame.display.flip()

@@ -10,7 +10,7 @@ import pygame
 class Point(Renderable):
     point: Cartesian
     
-    def render(self, surface: Surface, origin: Cartesian, color: Color = Color(255, 255, 255), size: float = 10) -> None:
+    def render(self, surface: Surface, origin: Cartesian, color: Color = Color(255, 255, 255), size: float = 8) -> None:
         radius   = size / 2
         position = (self.point.x + origin.x, self.point.y + origin.y)
         

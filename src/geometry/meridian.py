@@ -5,13 +5,13 @@ from dataclasses import dataclass
 @dataclass
 class Meridian:
     radius: float
-    phi:    float
+    theta:  float
 
     def __post_init__(self) -> None:
         self.points = [
-            Spherical(self.radius, 10, self.phi),
-            Spherical(self.radius, 130, self.phi),
-            Spherical(self.radius, 250, self.phi)
+            Spherical(self.radius, self.theta, 10),
+            Spherical(self.radius, self.theta, 130),
+            Spherical(self.radius, self.theta, 250)
         ]
 
     def set_points(self, points: list[Spherical]) -> None:

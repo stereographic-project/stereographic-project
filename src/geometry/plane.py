@@ -24,10 +24,7 @@ class Plane:
         radius = to_spherical(line.b).radius
         
         divider = (line.b.z - radius)
-
-        if (line.b.z - radius) == 0:
-            divider = 0.000000000001
-
+        
         scalar = (self.height - radius) / divider
 
         x = line.a.x + line.vector.x * scalar

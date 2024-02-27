@@ -16,22 +16,16 @@ meridians = [
     Meridian(10, 30)
 ]
 
-# for i in range(12):
-#     meridians.append(Meridian(10, i * 360 / 12))
-
 parallels = [
-    Parallel(10, 30)
+#     Parallel(10, 30)
 ]
-
-# for i in range(18):
-#     parallels.append(Parallel(10, i * 10))
 
 sphere = Sphere(10, points, meridians, parallels)
 
 def rotate() -> Stereographic:
     global spheres
 
-    plane = Plane(-50)
+    plane = Plane(-500)
     sphere.rotate(Rotation(.1, .1, .1))
 
     stereographic = Stereographic(sphere, plane)

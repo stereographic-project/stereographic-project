@@ -17,7 +17,7 @@ class Window:
     height: int
 
     # Optionals
-    fps: int = 60
+    fps: int = 30
 
     @property
     def resolution(self) -> tuple:
@@ -29,7 +29,8 @@ class Window:
 
     def __post_init__(self) -> None:
         self.clock   = Clock()
-        self.surface = pygame.display.set_mode(self.resolution)
+        self.screen  = pygame.display.set_mode(self.resolution)
+        self.surface = Surface(self.resolution)
 
     def render_meridians(self, stereographic: Stereographic) -> None:
         for meridian in stereographic.sphere.meridians:
@@ -47,7 +48,7 @@ class Window:
             for point in parallel.points:
                 points.append(stereographic.point_to_plane(point))
 
-            Circle.from_points(points[0], points[1], points[2]).render(self.surface, self.origin)
+            Circle.from_points(points[0], points[1], points[2]).render(self.surface, self.origin, Color(255, 255, 255))
 
 
     def render(self, stereographic: Stereographic) -> None:
@@ -71,6 +72,7 @@ class Window:
             
             pygame.display.set_caption(f"Stereographic Projection: { len(stereographic.plane.points) } POINTS, { len(stereographic.sphere.meridians) } MERIDIANS AND { len(stereographic.sphere.parallels) } PARALLELS. { self.clock.get_fps() // 1 } FPS")
             
-            self.render(stereographic)            
+            self.render(stereographic)
             
+            self.screen.blit(self.surface, (0, 0))
             pygame.display.flip()

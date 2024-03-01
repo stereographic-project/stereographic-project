@@ -20,12 +20,14 @@ class Plane:
         self.points.append(point)
 
     # CALCULATORS
-    def calculate_intersection(self, line: Line) -> Cartesian:
+    def calculate_intersection(self, line: Line) -> Cartesian|None:
         radius = to_spherical(line.b).radius
         
         divider = (line.b.z - radius)
-        
-        scalar = (self.height - radius) / divider
+
+        scalar = 1
+        if (divider != 0):
+            scalar = (self.height - radius) / divider
 
         x = line.a.x + line.vector.x * scalar
         y = line.a.y + line.vector.y * scalar

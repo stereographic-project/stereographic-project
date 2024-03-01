@@ -13,17 +13,51 @@ for _ in range(500):
     points.append(Spherical(10, random.uniform(0, 360), random.uniform(0, 360)))
 
 meridians = [
-    Meridian(10, 30)
+    Meridian(10, 20),
+    Meridian(10, 40),
+    Meridian(10, 60),
+    Meridian(10, 80),
+    Meridian(10, 100),
+    Meridian(10, 120),
+    Meridian(10, 140),
+    Meridian(10, 160),
+    Meridian(10, 180),
+    Meridian(10, 200),
+    Meridian(10, 220),
+    Meridian(10, 240),
+    Meridian(10, 260),
+    Meridian(10, 280),
+    Meridian(10, 300),
+    Meridian(10, 320),
+    Meridian(10, 340),
+    Meridian(10, 360),
 ]
 
 parallels = [
-#     Parallel(10, 30)
+    Parallel(10, 20),
+    Parallel(10, 40),
+    Parallel(10, 60),
+    Parallel(10, 80),
+    Parallel(10, 100),
+    Parallel(10, 120),
+    Parallel(10, 140),
+    Parallel(10, 160),
+    Parallel(10, 180),
+    Parallel(10, 200),
+    Parallel(10, 220),
+    Parallel(10, 240),
+    Parallel(10, 260),
+    Parallel(10, 280),
+    Parallel(10, 300),
+    Parallel(10, 320),
+    Parallel(10, 340),
+    Parallel(10, 360),
 ]
 
 sphere = Sphere(10, points, meridians, parallels)
 
 def rotate() -> Stereographic:
-    global spheres
+    global sphere
 
     plane = Plane(-500)
     sphere.rotate(Rotation(.1, .1, .1))

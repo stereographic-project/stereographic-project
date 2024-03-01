@@ -7,9 +7,12 @@ from pygame.time import Clock
 from dataclasses import dataclass
 
 from rendering   import Point, Circle
+from rendering   import Line as RenderableLine
 from geometry    import Line
 from projection  import Stereographic
 from coordinates import Cartesian
+
+from math import sqrt
 
 @dataclass
 class Window:
@@ -17,7 +20,7 @@ class Window:
     height: int
 
     # Optionals
-    fps: int = 30
+    fps: int = 60
 
     @property
     def resolution(self) -> tuple:
@@ -39,7 +42,21 @@ class Window:
             for point in meridian.points:
                 points.append(stereographic.point_to_plane(point))
 
-            Circle.from_points(points[0], points[1], points[2]).render(self.surface, self.origin)
+            slope1 = Line(points[0], points[1]).slope
+            slope2 = Line(points[0], points[2]).slope
+            difference = abs(slope1 - slope2)
+            
+            if (slope1 == slope2 and slope1 == 2147483647):
+                continue;
+            
+            if (difference <= 0.001 and difference != 0):
+
+                line = Line(points[0], points[1])
+                RenderableLine(line).render(self.surface, self.origin, Color(127, 127, 127))
+
+                continue
+
+            Circle.from_points(points[0], points[1], points[2]).render(self.surface, self.origin, Color(127, 127, 127))
 
     def render_parallels(self, stereographic: Stereographic) -> None:
         for parallel in stereographic.sphere.parallels:
@@ -48,15 +65,30 @@ class Window:
             for point in parallel.points:
                 points.append(stereographic.point_to_plane(point))
 
-            Circle.from_points(points[0], points[1], points[2]).render(self.surface, self.origin, Color(255, 255, 255))
+            slope1 = Line(points[0], points[1]).slope
+            slope2 = Line(points[0], points[2]).slope
+            difference = abs(slope1 - slope2)
+            
+            if (slope1 == slope2 and slope1 == 2147483647):
+                continue;
+            
+            if (difference <= 0.001 and difference != 0):
+
+                line = Line(points[0], points[1])
+                RenderableLine(line).render(self.surface, self.origin, Color(127, 127, 127))
+
+                continue
+
+            Circle.from_points(points[0], points[1], points[2]).render(self.surface, self.origin, Color(127, 127, 127))
+
 
 
     def render(self, stereographic: Stereographic) -> None:
-        for point in stereographic.plane.points:
-            Point(point).render(self.surface, self.origin)
-
         self.render_meridians(stereographic)
         self.render_parallels(stereographic)
+
+        for point in stereographic.plane.points:
+            Point(point).render(self.surface, self.origin)
 
     def run(self, callback: Callable[[], Stereographic]) -> None:
         while True:

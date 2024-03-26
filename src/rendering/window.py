@@ -102,7 +102,7 @@ class Window:
             self.surface.fill(Color(0, 0, 0))
             stereographic = callback()
             
-            pygame.display.set_caption(f"Stereographic Projection: { len(stereographic.plane.points) } POINTS, { len(stereographic.sphere.meridians) } MERIDIANS AND { len(stereographic.sphere.parallels) } PARALLELS. { self.clock.get_fps() // 1 } FPS")
+            pygame.display.set_caption(f"Stereographic Projection: { len(stereographic.plane.points) } STARS, { len(stereographic.sphere.meridians) } MERIDIANS AND { len(stereographic.sphere.parallels) } PARALLELS. { self.clock.get_fps() // 1 } FPS")
             
             self.render(stereographic)
             
